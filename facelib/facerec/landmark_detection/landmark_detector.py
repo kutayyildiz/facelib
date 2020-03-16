@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 import pkg_resources
-import tensorflow as tf
 from tflite_runtime.interpreter import Interpreter, load_delegate
 
 
