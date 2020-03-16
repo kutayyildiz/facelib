@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 import cv2
 #%% [markdown]
 ## Prepare detectors
-face_detector = facerec.SSDFaceDetector(tpu=True)
+face_detector = facerec.SSDFaceDetector()
 landmark_detector = facerec.LandmarkDetector()
 feature_extractor = facerec.FeatureExtractor()
 #%% [markdown]
