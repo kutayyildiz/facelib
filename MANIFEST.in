@@ -1,0 +1,4 @@
+include facelib/facerec/face_detection/data/mobilenet_ssd_v2_320x320_open_image_v4_int8*
+include facelib/facerec/landmark_detection/data/mobilenet_*
+include facelib/facerec/feature_extraction/data/mobilenet_*
+prune facelib/_demo
