@@ -11,6 +11,12 @@ Landmark Detection models are trained using [VggFace2.](http://www.robots.ox.ac.
 
 ## Usage
 
+### Pip installation
+
+```bash
+pip install facelib
+```
+
 ### TFLite runtime installation
 
 To use facelib.facerec package use the following bash command to install tflite-runtime pip package.
