@@ -31,7 +31,7 @@ model.summary()
 #%% [markdown]
 ## Dummy training data/label generator (batched)
 num_epochs = 2
-num_data = 5000
+num_data = 1000
 batch_size = 64
 steps_per_epoch = num_data // batch_size
 
