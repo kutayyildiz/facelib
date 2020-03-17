@@ -6,6 +6,10 @@ import pkg_resources
 
 
 class CascadeClassifier:
+    """OpenCV cascade classifier.
+
+    
+    """
     def __init__(self, name_xml, min_neighbors, scale, resize=None, input_img_channel='rgb'):
         path_xml = pkg_resources.resource_filename(
             'facelib.facerec.face_detection',
