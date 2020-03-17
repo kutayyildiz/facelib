@@ -14,8 +14,8 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 
 setup(
-    name='facelib',  # Required
-    version='1.0',  # Required
+    name='facelib',
+    version='1.1',
     description="""Face Recognition (train/test/deploy)(tensorflow/tflite/keras/edgetpu)""",
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -32,7 +32,9 @@ setup(
 
         'License :: OSI Approved :: MIT License',
 
-        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
     package_dir={'facelib': 'facelib'},
     keywords='face,recognition,detection,tensorflow,lite,keras,loss,layer,edgetpu',
