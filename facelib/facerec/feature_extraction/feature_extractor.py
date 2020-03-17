@@ -1,7 +1,13 @@
+"""Script for facial feature extraction."""
+
+from pathlib import Path
+
 import cv2
 import numpy as np
 import pkg_resources
 from tflite_runtime.interpreter import Interpreter, load_delegate
+
+from facelib.facerec.helper import install_data
 
 
 class FeatureExtractor:
@@ -18,9 +24,12 @@ class FeatureExtractor:
             'facelib.facerec.feature_extraction',
             'data/' + name_tflite
         )
+        path_tflite = Path(path_tflite)
+        if not path_tflite.exists():
+            install_data('feature_extraction', path_tflite.stem)
 
         self.feature_extraction_inference = Interpreter(
-            model_path = path_tflite,
+            model_path = str(path_tflite),
             experimental_delegates = delegates,
         )
         self.feature_extraction_inference.allocate_tensors()

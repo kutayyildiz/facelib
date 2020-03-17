@@ -1,37 +1,30 @@
-import platform
-import subprocess
-import sys
+"""Helper methods for facerec."""
 
-def get_tflite_runtime_link():
-    """Get tflite_runtime whl package from google."""
-    # Get system info
-    assert_msg = 'tflite_runtime is not available for this platform'
-    p_system = platform.system()
-    if p_system ==  'Linux':
-        plt = 'linux'
-    elif p_system == 'Windows':
-        plt = 'win'
-    elif p_system == 'Darwin':
-        assert platform.mac_ver()[0][:5] == '10.14', assert_msg
-        plt = 'macosx_10_14'
-    else:
-        sys.exit(assert_msg)
+from configparser import ConfigParser, ExtendedInterpolation
+from urllib import request
+from pathlib import Path
+import pkg_resources
 
-    # Get python version
-    major, minor = platform.python_version_tuple()[:2]
-    python_version = major + minor
 
-    # Get processor architecture
-    arch = platform.machine()
-
-    # Assertion
-    assert python_version in ['35', '36', '37'] or arch in ['armv7l', 'aarch64', 'x86_64', 'amd64']
-
-    url_base = 'https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp{0}-cp{0}m-{1}_{2}.whl'
-    url_whl = url_base.format(python_version, plt, arch)
-    return url_whl
-
-def install_tflite_runtime():
-    """Download tflite-runtime pip package."""
-    url_whl = get_tflite_runtime_link()
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', url_whl])
+def install_data(type_model, name_model):
+    types = [
+        'face_detection'
+        'landmark_detection',
+        'feature_extraction',]
+    assert type_model in types, 'Available types are: {}'.format(str(types))
+    path_config = pkg_resources.resource_filename('facelib.facerec', 'links_to_models.ini')
+    config = ConfigParser(interpolation=ExtendedInterpolation())
+    config.read(path_config)
+    keys = list(config[type_model].keys())
+    assert name_model in keys, 'Available {} {} models are:\n{}'.format(*type_model.split('_'), str(keys))
+    link_data = config[type_model][name_model]
+    extension = Path(link_data).suffix
+    response = request.urlopen(link_data)
+    path_file = pkg_resources.resource_filename(
+        'facelib.facerec.' + type_model,
+        'data/' + name_model + extension
+    )
+    with open(path_file, 'wb') as f:
+        print('Downloading from url <{}>...'.format(link_data))
+        f.write(response.read())
+        print('File <{}> successfully created.'.format(path_file))

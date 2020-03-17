@@ -1,7 +1,13 @@
+"""Script for facial landmark detection."""
+
+from pathlib import Path
+
 import cv2
 import numpy as np
 import pkg_resources
 from tflite_runtime.interpreter import Interpreter, load_delegate
+
+from facelib.facerec.helper import install_data
 
 
 class LandmarkDetector:
@@ -18,9 +24,12 @@ class LandmarkDetector:
             'facelib.facerec.landmark_detection',
             'data/' + name_tflite
         )
+        path_tflite = Path(path_tflite)
+        if not path_tflite.exists():
+            install_data('landmark_detection', path_tflite.stem)
 
         self.landmark_detection_inference = Interpreter(
-            model_path = path_tflite,
+            model_path = str(path_tflite),
             experimental_delegates = delegates,
         )
         self.landmark_detection_inference.allocate_tensors()

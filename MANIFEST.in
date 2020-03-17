@@ -1,4 +1,1 @@
-include facelib/facerec/face_detection/data/*
-include facelib/facerec/landmark_detection/data/mobilenet_*
-include facelib/facerec/feature_extraction/data/mobilenet_*
 prune facelib/_demo

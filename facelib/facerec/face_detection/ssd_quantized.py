@@ -1,9 +1,12 @@
 """Quantized Single Shot Detector for face detection."""
+from pathlib import Path
 
 import cv2
 import numpy as np
 import pkg_resources
 from tflite_runtime.interpreter import Interpreter, load_delegate
+
+from facelib.facerec.helper import install_data
 
 
 class SSD:
@@ -12,24 +15,26 @@ class SSD:
     Notes
     -----
     ref(tflite) : http://download.tensorflow.org/models/object_detection/facessd_mobilenet_v2_quantized_320x320_open_image_v4.tar.gz
+
     Warnings
     --------
-    If the image to be predicted is not square shaped prediction
-        accuracy will be dramatically reduced.
+    If the image to be predicted is not square shaped, prediction accuracy is dramatically reduced.
     """
 
     def __init__(self, input_img_channel='rgb', resize=None, tpu=False):
         if tpu:
-            name_tflite = 'mobilenet_ssd_v2_320x320_open_image_v4_int8_edgetpu.tflite'
+            name_tflite = 'ssd_int8_edgetpu.tflite'
             delegates = [load_delegate('libedgetpu.so.1')]
         else:
-            name_tflite = 'mobilenet_ssd_v2_320x320_open_image_v4_int8.tflite'
+            name_tflite = 'ssd_int8.tflite'
             delegates = []
         path_tflite = pkg_resources.resource_filename(
             'facelib.facerec.face_detection',
             'data/' + name_tflite
         )
-
+        path_tflite = Path(path_tflite)
+        if not path_tflite.exists():
+            install_data('face_detection', path_tflite.stem)
         self.face_detection_inference = Interpreter(
             model_path = path_tflite,
             experimental_delegates=delegates
