@@ -2,6 +2,9 @@
 
 Face recognition python library(tensorflow, opencv).
 
+## Demo
+
+facerec module demo: <https://github.com/kutayyildiz/facelib/blob/master/facelib/_demo/demo_facerec_pipeline.ipynb>
 ## Info
 
 ### Dataset
