@@ -1,1 +1,3 @@
+include facelib/_utils/links_to_models.ini
+include facelib/_utils/settings.ini
 prune facelib/_demo
