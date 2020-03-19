@@ -1,0 +1,3 @@
+Model,vggface2_test_avg_rmse
+MobileNet_fp32,0.019538559979279318
+MobileNetV2_fp32,0.02440160440439857

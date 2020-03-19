@@ -1,0 +1,5 @@
+Model,Processor,Inference,Execution Time
+Mobilenet,i7-6700k,fp32,9.142335079995974
+MobilenetV2,i7-6700k,fp32,9.840215124000679
+Mobilenet,i7-6700k,int8,226.38764617600103
+MobilenetV2,i7-6700k,int8,127.34148352600461
