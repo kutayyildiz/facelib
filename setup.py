@@ -43,10 +43,11 @@ setup(
     install_requires=[
         'opencv-python',
         'numpy',
-        'scikit-image'
+        'scikit-image',
+        'scikit-learn',
     ],
     extras_require={
-        'dev': ['tensorflow']
+        'dev': ['tensorflow'],
     },
     project_urls={
         'Source': 'https://github.com/kutayyildiz/facelib'
