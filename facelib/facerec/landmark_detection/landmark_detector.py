@@ -7,7 +7,7 @@ import numpy as np
 import pkg_resources
 from tflite_runtime.interpreter import Interpreter, load_delegate
 
-from facelib.facerec.helper import install_data
+from facelib._utils import helper
 
 
 class LandmarkDetector:
@@ -19,14 +19,7 @@ class LandmarkDetector:
             name_model = name_model + '_edgetpu'
         else:
             delegates = []
-        name_tflite = name_model + '.tflite'
-        path_tflite = pkg_resources.resource_filename(
-            'facelib.facerec.landmark_detection',
-            'data/' + name_tflite
-        )
-        path_tflite = Path(path_tflite)
-        if not path_tflite.exists():
-            install_data('landmark_detection', path_tflite.stem)
+        path_tflite = helper.get_path('landmark_detection', name_model)
 
         self.landmark_detection_inference = Interpreter(
             model_path = str(path_tflite),

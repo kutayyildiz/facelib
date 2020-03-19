@@ -7,7 +7,7 @@ import numpy as np
 import pkg_resources
 from tflite_runtime.interpreter import Interpreter, load_delegate
 
-from facelib.facerec.helper import install_data
+from facelib._utils import helper
 
 
 class FeatureExtractor:
@@ -19,14 +19,7 @@ class FeatureExtractor:
             name_model = name_model + '_edgetpu'
         else:
             delegates = []
-        name_tflite = name_model + '.tflite'
-        path_tflite = pkg_resources.resource_filename(
-            'facelib.facerec.feature_extraction',
-            'data/' + name_tflite
-        )
-        path_tflite = Path(path_tflite)
-        if not path_tflite.exists():
-            install_data('feature_extraction', path_tflite.stem)
+        path_tflite = helper.get_path('feature_extraction', name_model)
 
         self.feature_extraction_inference = Interpreter(
             model_path = str(path_tflite),

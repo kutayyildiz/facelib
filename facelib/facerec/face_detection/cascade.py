@@ -6,22 +6,15 @@ import cv2
 import numpy as np
 import pkg_resources
 
-from facelib.facerec.helper import install_data
+from facelib._utils import helper
 
 class CascadeClassifier:
     """OpenCV cascade classifier.
 
     
     """
-    def __init__(self, name_xml, min_neighbors, scale, resize=None, input_img_channel='rgb'):
-        path_xml = pkg_resources.resource_filename(
-            'facelib.facerec.face_detection',
-            'data/' + name_xml
-        )
-        path_xml = Path(path_xml)
-        if not path_xml.exists():
-            install_data('face_detection', path_xml.stem)
-        self.face_cascade = cv2.CascadeClassifier(str(path_xml))
+    def __init__(self, path_xml, min_neighbors, scale, resize=None, input_img_channel='rgb'):
+        self.face_cascade = cv2.CascadeClassifier(path_xml)
         self.min_neighbors = min_neighbors
         self.resize = resize
         assert input_img_channel in ['gray', 'bgr', 'rgb']
@@ -46,9 +39,11 @@ class CascadeClassifier:
 
 class LBPCascade(CascadeClassifier):
     def __init__(self, min_neighbors=3, scale=1.2, **kwargs):
-        name_xml = 'lbpcascade.xml'
+        name_model = 'lbpcascade'
+        type_model = 'face_detection'
+        path_xml = helper.get_path(type_model, name_model)
         super(LBPCascade, self).__init__(
-            name_xml,
+            path_xml,
             min_neighbors=min_neighbors,
             scale=scale,
             **kwargs,
@@ -56,9 +51,11 @@ class LBPCascade(CascadeClassifier):
 
 class HAARCascade(CascadeClassifier):
     def __init__(self, min_neighbors=5, scale=1.2, **kwargs):
-        name_xml = 'haarcascade.xml'
+        name_model = 'haarcascade'
+        type_model = 'face_detection'
+        path_xml = helper.get_path(type_model, name_model)
         super(HAARCascade, self).__init__(
-            name_xml,
+            path_xml,
             min_neighbors=min_neighbors,
             scale=scale,
             **kwargs,
