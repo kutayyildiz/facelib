@@ -14,7 +14,7 @@ Landmark Detection models are trained using [VggFace2.](http://www.robots.ox.ac.
 ### Pip installation
 
 ```bash
-pip install facelib
+pip3 install facelib
 ```
 
 ### TFLite runtime installation
@@ -32,7 +32,7 @@ or you can install from [tensorflow.org](https://www.tensorflow.org/lite/guide/p
 Tensorflow is required for facelib.dev package. If you wish you can download facelib with tensorflow using the following command.
 
 ```bash
-pip install facelib[dev]
+pip3 install facelib[dev]
 ```
 
 ### Basic Usage
