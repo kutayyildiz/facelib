@@ -104,6 +104,15 @@ def get_templates_config():
     config.read(path_config)
     return config
 
+def get_settings_config():
+    name_config = 'settings.ini'
+    path_config = pkg_resources.resource_filename('facelib._utils', name_config)
+    config = ConfigParser(interpolation=ExtendedInterpolation())
+    config.read(path_config)
+    assert 1 >= config['Predict']['tolerance'] > 0, "Tolerance should be: (0, 1]"
+    return config
+
+
 def set_templates_config(config):
     name_config = 'templates.ini'
     path_config = pkg_resources.resource_filename('facelib._utils', name_config)
