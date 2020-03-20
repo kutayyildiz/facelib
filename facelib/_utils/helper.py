@@ -97,32 +97,32 @@ def install_data(type_model, name_model):
         f.write(response.read())
         print('File <{}> successfully created.'.format(path_file))
 
-def get_settings_config():
-    name_config = 'settings.ini'
+def get_templates_config():
+    name_config = 'templates.ini'
     path_config = pkg_resources.resource_filename('facelib._utils', name_config)
     config = ConfigParser(interpolation=ExtendedInterpolation())
     config.read(path_config)
     return config
 
-def set_settings_config(config):
-    name_config = 'settings.ini'
+def set_templates_config(config):
+    name_config = 'templates.ini'
     path_config = pkg_resources.resource_filename('facelib._utils', name_config)
     with open(path_config, 'w') as configfile:
         config.write(configfile)
 
 def set_default_model(type_model, name_model):
     assert_model_availability(type_model, name_model)
-    config = get_settings_config()
+    config = get_templates_config()
     config['DEFAULT'][type_model] = name_model
-    set_settings_config(config)
+    set_templates_config(config)
 
 def get_default_model(type_model):
-    config = get_settings_config()
+    config = get_templates_config()
     config['DEFAULT'][type_model]
     return type_model
 
 def get_default_pipeline():
-    config = get_settings_config()
+    config = get_templates_config()
     default_config = config['DEFAULT']
     fd = default_config['face_detection']
     ld = default_config['landmark_detection']
@@ -131,24 +131,24 @@ def get_default_pipeline():
 
 def set_default_pipeline(name_pipeline):
     fd, ld, fe = get_pipeline(name_pipeline)
-    config = get_settings_config()
+    config = get_templates_config()
     default_config = config['DEFAULT']
     default_config['face_detection'] = fd 
     default_config['landmark_detection'] = ld
     default_config['feature_extraction'] = fe
-    set_settings_config(config)
+    set_templates_config(config)
 
 def get_pipeline(name_pipeline):
-    config = get_settings_config()
+    config = get_templates_config()
     str_value = config['PipelineTemplates'][name_pipeline]
     list_value =  str_value.split(',')
     return list_value
 
 def del_pipeline(name_pipeline):
-    config = get_settings_config()
+    config = get_templates_config()
     assert name_pipeline in config['PipelineTemplates'].keys(), 'Pipeline does not exist.'
     del config['PipelineTemplates'][name_pipeline]
-    set_settings_config(config)
+    set_templates_config(config)
 
 def save_pipeline(list_pipeline, name_pipeline):
     assert len(list_pipeline) == 3, 'Number of models should be 3.'
@@ -157,6 +157,13 @@ def save_pipeline(list_pipeline, name_pipeline):
     types = ['face_detection', 'landmark_detection', 'feature_extraction']
     for type_model, name_model in zip(types, list_pipeline):
         assert_model_availability(type_model, name_model)
-    config = get_settings_config()
+    config = get_templates_config()
     config['PipelineTemplates'][name_pipeline] = ','.join(list_pipeline)
-    set_settings_config(config)
+    set_templates_config(config)
+
+def get_classifier_path(name_clf):
+    path_classifier = pkg_resources.resource_filename(
+        'facelib.facerec', '_dataset/classifier/' + name_clf)
+    posix_path = Path(path_classifier).with_suffix('.joblib')
+    posix_path.parent.mkdir(parents=True, exist_ok=True)
+    return posix_path
