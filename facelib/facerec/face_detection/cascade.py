@@ -23,9 +23,9 @@ class CascadeClassifier:
 
     def predict(self, img):
         if self.input_img_channel != 'gray':
-            img= cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         if self.resize is not None:
-            img= cv2.resize(img, self.resize)
+            img = cv2.resize(img, self.resize)
         bboxes = self.face_cascade.detectMultiScale(img, scaleFactor=self.scale, minNeighbors=self.min_neighbors)
         bboxes = np.array(bboxes)
         bboxes = bboxes.reshape(-1, 2, 2)[:,:,::-1]
