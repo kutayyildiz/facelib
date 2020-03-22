@@ -11,13 +11,16 @@ from facelib._utils import helper
 
 
 class LandmarkDetector:
-    def __init__(self, name_model='mobilenet', inference='fp32', input_img_channel='rgb', tpu=False):
+    def __init__(self, name, input_img_channel='rgb'):
+        name_model, inference, tpu = name.split('_')
+        tpu = (tpu == 'tpu')
         assert inference in ['fp32', 'int8'], 'Available inferences are: fp32, int8'
         name_model = name_model + '_' + inference
         if tpu:
             delegates = [load_delegate('libedgetpu.so.1')]
-            name_model = name_model + '_edgetpu'
+            name_model = name_model + '_tpu'
         else:
+            name_model = name_model + '_cpu'
             delegates = []
         path_tflite = helper.get_path('landmark_detection', name_model)
 
