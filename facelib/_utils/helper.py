@@ -71,7 +71,7 @@ def get_path(type_model, name_model, force_download=True):
     link_model_data = links[type_model][name_model]
     filename = link_model_data.rsplit('/', 1)[-1]
     path_file = pkg_resources.resource_filename(
-        'facelib.facerec' + type_model,
+        'facelib.facerec.' + type_model,
         'data/' + filename
     )
     exist = Path(path_file).exists()
@@ -85,10 +85,7 @@ def get_link(type_model, name_model):
     return url_link
 
 def install_data(type_model, name_model):
-    path_file, exist = get_path(type_model, name_model, force_download=False)
-    if exist:
-        print('Model data already exists.')
-        return
+    path_file = get_path(type_model, name_model, force_download=False)
     link_data = get_link(type_model, name_model)
     response = request.urlopen(link_data)
     Path(path_file).parent.mkdir(parents=True, exist_ok=True)
@@ -109,8 +106,14 @@ def get_settings_config():
     path_config = pkg_resources.resource_filename('facelib._utils', name_config)
     config = ConfigParser(interpolation=ExtendedInterpolation())
     config.read(path_config)
-    assert 1 >= config['Predict']['tolerance'] > 0, "Tolerance should be: (0, 1]"
+    assert 1 >= float(config['Predict']['tolerance']) > 0, "Tolerance should be: (0, 1]"
     return config
+
+def set_settings_config(config):
+    name_config = 'settings.ini'
+    path_config = pkg_resources.resource_filename('facelib._utils', name_config)
+    with open(path_config, 'w') as configfile:
+        config.write(configfile)
 
 
 def set_templates_config(config):
@@ -176,3 +179,14 @@ def get_classifier_path(name_clf):
     posix_path = Path(path_classifier).with_suffix('.joblib')
     posix_path.parent.mkdir(parents=True, exist_ok=True)
     return posix_path
+
+def get_num_augment():
+    config = get_settings_config()
+    num_augment = int(config['Train']['num_augment'])
+    return num_augment
+
+def get_available_classifiers():
+    path_dir_classifier = pkg_resources.resource_filename(
+        'facelib.facerec', '_dataset/classifier')
+    posix_path = Path(path_dir_classifier)
+    return [p.stem for p in posix_path.glob('*.joblib')]
