@@ -144,3 +144,5 @@ static
 
 # KUTAY
 _module_demo/
+.vscode/
+facelib/facerec/_dataset/
