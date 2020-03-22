@@ -1,3 +1,3 @@
-precision_recall_pipelines_chokepoint_case_study_2
+precision_recall_pipelines_chokepoint_case_study_2.csv
     chokepoint: http://arma.sourceforge.net/chokepoint/
     fr_pipeline: {[FaceRecognition]_-_[LandmarkDetection]_-_[FeatureExtraction]}
