@@ -1,16 +1,15 @@
 """Entry point for facelib pip package."""
-from functools import wraps
-from textwrap import dedent
-from pathlib import Path
 import argparse
 import sys
+from functools import wraps
 from itertools import groupby
-# path_disk = '/media/disk_nvme'
-path_disk = 'F:'
-sys.path.append(path_disk + '/github/kutay/facelib')
+from pathlib import Path
+from textwrap import dedent
+
 import cv2
 
 from facelib._utils import helper
+
 try:
     from facelib._utils import face_recognition
 except:
