@@ -193,6 +193,7 @@ class FaceLib:
                         if name is None:
                             name = '__Unknown__'
                         path_img = path_crop/name/(str(i) + '_' + name_img)
+                        path_img.parent.mkdir(parents=True, exist_ok=True)
                         cv2.imwrite(str(path_img), img[...,::-1])
                         i += 1
                 else:
