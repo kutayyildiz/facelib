@@ -28,10 +28,10 @@ def get_tflite_runtime_link():
     python_version = major + minor
 
     # Get processor architecture
-    arch = platform.machine()
+    arch = platform.machine().lower()
 
     # Assertion
-    assert python_version in ['35', '36', '37'] or arch in ['armv7l', 'aarch64', 'x86_64', 'amd64']
+    assert python_version in ['35', '36', '37'] and arch in ['armv7l', 'aarch64', 'x86_64', 'amd64']
 
     url_base = 'https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp{0}-cp{0}m-{1}_{2}.whl'
     url_whl = url_base.format(python_version, plt, arch)
