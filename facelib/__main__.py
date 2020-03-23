@@ -190,6 +190,8 @@ class FaceLib:
                 if args.classifier is not None:
                     i = 0
                     for img, name in zip(faces_cropped, names_predicted):
+                        if name is None:
+                            name = '__Unknown__'
                         path_img = path_crop/name/(str(i) + '_' + name_img)
                         cv2.imwrite(str(path_img), img[...,::-1])
                         i += 1
