@@ -78,8 +78,6 @@ class FaceLib:
                             help=('predict person ids'))
         parser.add_argument('-v', '--verbose', action='store_true',
                             help='enable verbosity on console')
-        parser.add_argument('-s', '--save-csv', action='store_true',
-                            help='save predictions to csv: (path)_facelib_predicted.csv')
         parser.add_argument('-p', '--plot', action='store_true',
                             help='plot and save images to folder: (path)_facelib_plotted/')
         parser.add_argument('-c', '--crop', action='store_true',
@@ -152,8 +150,9 @@ class FaceLib:
     @staticmethod
     def _predict(args):
         detector = face_recognition.get_default_pipeline_detector()
-        posix_path_folder = Path(args.path)
+        posix_path_folder = Path(args.path) # test folder
         config_settings = helper.get_settings_config()
+        # Load classifier(person id)
         if args.classifier is not None:
             tolerance = float(config_settings['Predict']['tolerance'])
             posix_path_clf = helper.get_classifier_path(args.classifier)
@@ -164,15 +163,18 @@ class FaceLib:
                         args.classifier, ', '.join(helper.get_available_classifiers()))
                 sys.exit(message)
             clf = face_recognition.load(str(posix_path_clf))
+        # Walk through the images inside the test folder
         for img, name_img in face_recognition.gen_image(posix_path_folder):
             bboxes, landmarks, features = detector.predict(img)
             print(name_img)
             print('├───{} faces detected.'.format(len(bboxes)))
+            # Predict person ids and verbose to terminal
             if args.classifier is not None:
                 probas = clf.predict_proba(features)
                 names_predicted = [
                     clf.classes_[p.argmax()] if p.max() > (1 - tolerance) else None for p in probas]
                 print('├───{}'.format(names_predicted))
+            # Plot and save test images
             if args.plot:
                 path_plot = posix_path_folder.parent/(
                     posix_path_folder.stem + '_facelib_plotted')
@@ -182,6 +184,7 @@ class FaceLib:
                     names_predicted = None
                 img_plotted = face_recognition.plot(img, bboxes, landmarks, names_predicted)
                 cv2.imwrite(str(path_plotted_img), img_plotted[...,::-1])
+            # Crop and save test faces
             if args.crop:
                 path_crop = posix_path_folder.parent/(
                     posix_path_folder.stem + '_facelib_cropped')
