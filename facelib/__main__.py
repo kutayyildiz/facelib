@@ -1,47 +1,46 @@
 """Entry point for facelib pip package."""
 import argparse
 import sys
-from functools import wraps
 from itertools import groupby
 from pathlib import Path
 from textwrap import dedent
 
 import cv2
 
+
 from facelib._utils import helper
 
 try:
     from facelib._utils import face_recognition
-except:
+except ImportError:
     print('Warning: Failed to load FaceRecognition.\n'
-          'try installing tflite-runtime: $ facelib install --tflite-runtime')
-
+          'try installing tflite-runtime: $ facelib install --tflite-runtime\n')
 
 class FaceLib:
     def __init__(self,):
         self.parser = argparse.ArgumentParser(
             description='Face Recognition Library',
             formatter_class=argparse.RawTextHelpFormatter)
+        self.parser.set_defaults(func=lambda args: self.parser.print_help())
         self.subparsers = self.parser.add_subparsers()
-        self._parser_settings()
-        self._parser_predict()
-        self._parser_train()
-        self._parser_model()
-        self._parser_install()
         self._parse()
+
 
     def _parse(self,):
         args = sys.argv[1:]
-        if not args:
-            self.parser.parse_args(['-h'])
-            sys.exit()
+        self._parser_predict()
+        self._parser_train()
+        self._parser_model()
+        self._parser_settings()
+        self._parser_install()
+        self._parser_info()
         parsed = self.parser.parse_args(args)
         parsed.func(parsed)
 
     def _parser_settings(self,):
         config = helper.get_settings_config()
-        parser = self.subparsers.add_parser(name='setting',
-                                            help='Adjust settings.',
+        parser = self.subparsers.add_parser(name='settings',
+                                            help='adjust settings',
                                             formatter_class=argparse.RawTextHelpFormatter)
         # Group: Predict
         config_predict = config['Predict']
@@ -72,12 +71,10 @@ class FaceLib:
 
     def _parser_predict(self,):
         parser = self.subparsers.add_parser(name='predict',
-                                            help='Make predictions on images inside a folder.')
+                                            help='make predictions on images inside a folder')
         parser.add_argument('path', type=str, help='folder to be predicted')
         parser.add_argument('-clf', '--classifier', type=str,
                             help=('predict person ids'))
-        parser.add_argument('-v', '--verbose', action='store_true',
-                            help='enable verbosity on console')
         parser.add_argument('-p', '--plot', action='store_true',
                             help='plot and save images to folder: (path)_facelib_plotted/')
         parser.add_argument('-c', '--crop', action='store_true',
@@ -93,7 +90,8 @@ class FaceLib:
                 normalized += ',\n'
             normalized = normalized[:-2] + '}'
             return normalized
-        parser = self.subparsers.add_parser(name='model', help='model select/delete/load/save')
+        parser = self.subparsers.add_parser(name='model', help='select/delete/load/save models')
+        parser.set_defaults(func=lambda args: parser.print_help())
         subparsers_model = parser.add_subparsers()
         # Parser: select
         parser_select = subparsers_model.add_parser(name='select', help='select default models',
@@ -124,13 +122,26 @@ class FaceLib:
 
     def _parser_install(self,):
         parser = self.subparsers.add_parser(name='install',
-                                            help='install a package or dataset.')
+                                            help='install a package or dataset')
         parser.add_argument('-tr', '--tflite-runtime', action='store_true',
                             help='install tflite-runtime(pip package)')
         parser.set_defaults(func=self._install)
 
+    def _parser_info(self,):
+        parser = self.subparsers.add_parser(name='info',
+                                            help='get information on models/classifiers')
+        # Group: Classification
+        group_classification = parser.add_argument_group('Classification')
+        group_classification.add_argument('-clf', '--classifier', action='store_true')
+        # Group: Pipeline
+        group_pipeline = parser.add_argument_group('Pipeline')
+        group_pipeline.add_argument('-t', '--template', action='store_true')
+        parser.set_defaults(func=self._info)
+
     @staticmethod
     def _settings(args):
+        if (args.tolerance and args.num_augment) is None:
+            print('Warning: No arguments recieved.')
         config = helper.get_settings_config()
         # Group: Predict
         if args.tolerance is not None:
@@ -155,19 +166,12 @@ class FaceLib:
         # Load classifier(person id)
         if args.classifier is not None:
             tolerance = float(config_settings['Predict']['tolerance'])
-            posix_path_clf = helper.get_classifier_path(args.classifier)
-            if not posix_path_clf.exists():
-                message = dedent("""\
-                    Classifier name "{}" does not exist.
-                    Available classifiers are: {}""").format(
-                        args.classifier, ', '.join(helper.get_available_classifiers()))
-                sys.exit(message)
-            clf = face_recognition.load(str(posix_path_clf))
+            clf = helper.get_classifier(args.classifier)
         # Walk through the images inside the test folder
         for img, name_img in face_recognition.gen_image(posix_path_folder):
             bboxes, landmarks, features = detector.predict(img)
             print(name_img)
-            print('├───{} faces detected.'.format(len(bboxes)))
+            print('├───{} faces detected'.format(len(bboxes)))
             # Predict person ids and verbose to terminal
             if args.classifier is not None:
                 probas = clf.predict_proba(features)
@@ -237,9 +241,19 @@ class FaceLib:
 
     @staticmethod
     def _install(args):
+        if not args.tflite_runtime:
+            print('Warning: No arguments recieved.')
         if args.tflite_runtime:
             helper.install_tflite_runtime()
 
+    @staticmethod
+    def _info(args):
+        if not (args.classifier and args.template):
+            print('Warning: No arguments recieved.')
+        if args.classifier:
+            helper.print_classifiers_info()
+        if args.template:
+            helper.print_templates_info()
 
 if __name__ == '__main__':
     FaceLib()
