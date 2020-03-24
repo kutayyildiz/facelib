@@ -2,17 +2,116 @@
 
 Face recognition python library(tensorflow, opencv).
 
-## Demo
+## Usage (console)
 
-facerec module demo: <https://github.com/kutayyildiz/facelib/blob/master/facelib/_demo/demo_facerec_pipeline.ipynb>
-## Info
+try `facelib --help` to discover more
 
-### Dataset
+### Train
 
-Feature extraction models are trained using insightfaces [MS1M-Arcface.](https://github.com/deepinsight/insightface/wiki/Dataset-Zoo)  
-Landmark Detection models are trained using [VggFace2.](http://www.robots.ox.ac.uk/~vgg/data/vgg_face2/)
+***Console command***
 
-## Usage
+```bash
+foo@bar:~$ python3 -m facelib train train_images/ lotr
+```
+
+***Console out***
+
+```bash
+Current pipeline: ssd_int8_cpu, mobilenetv2_fp32_cpu, densenet_fp32_cpu
+Classifier named `lotr` succesfully trained and saved.
+```
+
+***Folder structure:***  
+train_images/  
+├───elijah_wood/  
+├───├──0.jpg  
+├───├──1.jpg  
+├───liv_tyler/  
+├───├──0.jpg  
+├───├──1.jpg  
+...  
+
+***Some of the train images:***  
+https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr_cast.png
+| Image Name                      | Image                                                                                |
+| ------------------------------- | ------------------------------------------------------------------------------------ |
+| train_images/ian_mckellen/0.jpg | <img src="https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr/train_images/ian_mckellen/0.jpg" width=200, height=100> |
+| train_images/seanastin/0.jpg    | ![seanastin](https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr/train_images/sean_astin/0.jpg)                       |
+
+### Predict
+
+***Console command***
+
+-c: crop  
+-p: plot  
+-clf: classifier
+
+```bash
+foo@bar:~$ python3 -m facelib predict test_images/ -clf lotr -c -p
+```
+***Console out***
+
+```bash
+Current pipeline: ssd_int8_cpu, mobilenetv2_fp32_cpu, densenet_fp32_cpu
+1.jpg
+├───10 faces detected
+├───['billy_boyd', 'sean_astin', 'viggo_mortensen', 'elijah_wood', 'liv_tyler', 'dominic_monaghan', 'sean_bean', 'ian_mckellen', 'peter_jackson', 'orlando_bloom']
+2.jpg
+├───5 faces detected
+├───['dominic_monaghan', 'billy_boyd', 'elijah_wood', 'sean_astin', 'peter_jackson']
+3.jpg
+├───6 faces detected
+├───['orlando_bloom', 'dominic_monaghan', 'john_rhys_davies', 'sean_astin', 'elijah_wood', 'billy_boyd']
+0.jpeg
+├───5 faces detected
+├───['dominic_monaghan', 'orlando_bloom', 'elijah_wood', 'liv_tyler', 'billy_boyd']
+```
+
+***Folder structure:***  
+test_images/  
+├──0.jpeg  
+├──1.jpg  
+├──2.jpg  
+├──3.jpg  
+
+***Generated folders/files:***  
+test_images_facelib_cropped/  
+├───elijah_wood/  
+├───├──2_2.jpg  
+├───├──3_1.jpg  
+├───├──4_3.jpg  
+├───liv_tyler/  
+├───├──3_0.jpg  
+├───├──4_1.jpg  
+...
+
+***Some of the generated images:***  
+| Image Name                                      | Image                                                                             |
+| ----------------------------------------------- | --------------------------------------------------------------------------------- |
+| test_images_facelib_cropped/billy_boyd/0_1.jpg  | ![billyboyd](https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr/test_images_facelib_cropped/billy_boyd/0_1.jpg)   |
+| test_images_facelib_cropped/liv_tyler/4_1.jpg   | ![livtyler](https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr/test_images_facelib_cropped/liv_tyler/4_1.jpg)     |
+| test_images_facelib_cropped/elijah_wood/3_1.jpg | ![elijahwood](https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr/test_images_facelib_cropped/elijah_wood/3_1.jpg) |
+| test_images_facelib_plotted/1.jpg               | ![1](https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr/test_images_facelib_plotted/1.jpg)                        |
+
+## Usage (python)
+
+```python
+from facelib import facerec
+import cv2
+# You can use face_detector, landmark_detector or feature_extractor individually using .predict method. e.g.(bboxes = facedetector.predict(img))
+face_detector = facerec.SSDFaceDetector()
+landmark_detector = facerec.LandmarkDetector()
+feature_extractor = facerec.FeatureExtractor()
+
+pipeline = facerec.Pipeline(face_detector, landmark_detector, feature_extractor)
+path_img = './path_to_some_image.jpg'
+img = cv2.imread(path_img)
+img = img[...,::-1] # cv2 returns bgr format but every method inside this package takes rgb format
+bboxes, landmarks, features = pipeline.predict(img)
+# Note that values returned (bboxes and landmarks) are in fraction.[0,1]
+```
+
+## Installation
 
 ### Pip installation
 
@@ -38,23 +137,12 @@ Tensorflow is required for facelib.dev package. If you wish you can download fac
 pip3 install facelib[dev]
 ```
 
-### Basic Usage
+## Info
 
-```python
-from facelib import facerec
-import cv2
-# You can use face_detector, landmark_detector or feature_extractor individually using .predict method. e.g.(bboxes = facedetector.predict(img))
-face_detector = facerec.SSDFaceDetector()
-landmark_detector = facerec.LandmarkDetector()
-feature_extractor = facerec.FeatureExtractor()
+### Dataset
 
-pipeline = facerec.Pipeline(face_detector, landmark_detector, feature_extractor)
-path_img = './path_to_some_image.jpg'
-img = cv2.imread(path_img)
-img = img[...,::-1] # cv2 returns bgr format but every method inside this package takes rgb format
-bboxes, landmarks, features = pipeline.predict(img)
-# Note that values returned (bboxes and landmarks) are in fraction.[0,1]
-```
+Feature extraction models are trained using insightfaces [MS1M-Arcface.](https://github.com/deepinsight/insightface/wiki/Dataset-Zoo)  
+Landmark Detection models are trained using [VggFace2.](http://www.robots.ox.ac.uk/~vgg/data/vgg_face2/)
 
 ## Contents
 
