@@ -33,10 +33,10 @@ train_images/
 
 ***Some of the train images:***  
 https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr_cast.png
-| Image Name                      | Image                                                                                |
-| ------------------------------- | ------------------------------------------------------------------------------------ |
-| train_images/ian_mckellen/0.jpg | <img src="https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr/train_images/ian_mckellen/0.jpg" width=200, height=100> |
-| train_images/seanastin/0.jpg    | ![seanastin](https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr/train_images/sean_astin/0.jpg)                       |
+| Image Name                      | Image                                                                                                                |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| train_images/ian_mckellen/0.jpg | ![ianmckellen](https://github.com/kutayyildiz/facelib/raw/master/facelib/_demo/lotr/train_images/ian_mckellen/0.jpg) |
+| train_images/seanastin/0.jpg    | ![seanastin](https://github.com/kutayyildiz/facelib/raw/master/facelib/_demo/lotr/train_images/sean_astin/0.jpg)     |
 
 ### Predict
 
@@ -86,12 +86,12 @@ test_images_facelib_cropped/
 ...
 
 ***Some of the generated images:***  
-| Image Name                                      | Image                                                                             |
-| ----------------------------------------------- | --------------------------------------------------------------------------------- |
-| test_images_facelib_cropped/billy_boyd/0_1.jpg  | ![billyboyd](https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr/test_images_facelib_cropped/billy_boyd/0_1.jpg)   |
-| test_images_facelib_cropped/liv_tyler/4_1.jpg   | ![livtyler](https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr/test_images_facelib_cropped/liv_tyler/4_1.jpg)     |
-| test_images_facelib_cropped/elijah_wood/3_1.jpg | ![elijahwood](https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr/test_images_facelib_cropped/elijah_wood/3_1.jpg) |
-| test_images_facelib_plotted/1.jpg               | ![1](https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr/test_images_facelib_plotted/1.jpg)                        |
+| Image Name                                      | Image                                                                                                                               |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| test_images_facelib_cropped/billy_boyd/0_1.jpg  | ![billyboyd](https://github.com/kutayyildiz/facelib/raw/master/facelib/_demo/lotr/test_images_facelib_cropped/billy_boyd/0_1.jpg)   |
+| test_images_facelib_cropped/liv_tyler/4_1.jpg   | ![livtyler](https://github.com/kutayyildiz/facelib/raw/master/facelib/_demo/lotr/test_images_facelib_cropped/liv_tyler/4_1.jpg)     |
+| test_images_facelib_cropped/elijah_wood/3_1.jpg | ![elijahwood](https://github.com/kutayyildiz/facelib/raw/master/facelib/_demo/lotr/test_images_facelib_cropped/elijah_wood/3_1.jpg) |
+| test_images_facelib_plotted/1.jpg               | ![1](https://github.com/kutayyildiz/facelib/raw/master/facelib/_demo/lotr/test_images_facelib_plotted/1.jpg)                        |
 
 ## Usage (python)
 
