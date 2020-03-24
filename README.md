@@ -32,10 +32,9 @@ train_images/
 ...  
 
 ***Some of the train images:***  
-https://github.com/kutayyildiz/facelib/raw/master/facelib/facelib/_demo/lotr_cast.png
 | Image Name                      | Image                                                                                                                |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| train_images/ian_mckellen/0.jpg | ![ianmckellen](https://github.com/kutayyildiz/facelib/raw/master/facelib/_demo/lotr/train_images/ian_mckellen/0.jpg) |
+| train_images/ian_mckellen/0.jpg | <img src=https://github.com/kutayyildiz/facelib/raw/master/facelib/_demo/lotr/train_images/ian_mckellen/0.jpg width=200 height=100> |
 | train_images/seanastin/0.jpg    | ![seanastin](https://github.com/kutayyildiz/facelib/raw/master/facelib/_demo/lotr/train_images/sean_astin/0.jpg)     |
 
 ### Predict
