@@ -128,22 +128,12 @@ def train(detector, posix_path_folder, name_clf):
     n_neighbors = 3 if min_data_per_class < 5 else 5
     clf = KNeighborsClassifier(metric='cosine', n_neighbors=n_neighbors)
     clf.fit(X, y)
-    path_posix_clf = helper.get_classifier_path(name_clf)
-    if path_posix_clf.exists():
-        print('Classifier named "{}" is overwritten.'.format(name_clf))
-    dump(clf, str(path_posix_clf))
+    helper.save_classifier(clf, name_clf)
 
 def predict(detector, posix_path_folder, name_clf):
     config_settings = helper.get_settings_config()
     tolerance = float(config_settings['Predict']['tolerance'])
-    posix_path_clf = helper.get_classifier_path(name_clf)
-    if not posix_path_clf.exists():
-        message = dedent("""\
-            Classifier name "{}" does not exist.
-            Available classifiers are: {}""").format(
-                name_clf, ', '.join(helper.get_available_classifiers()))
-        sys.exit(message)
-    clf = load(str(posix_path_clf))
+    clf = helper.get_classifier(name_clf)
     print('Predictions:')
     for img, name_img in gen_image(posix_path_folder):
         _, _, features = detector.predict(img)
