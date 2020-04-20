@@ -2,4 +2,18 @@ Model,Processor,Inference,Execution Time
 Mobilenet,i7-6700k,fp32,9.142335079995974
 MobilenetV2,i7-6700k,fp32,9.840215124000679
 Mobilenet,i7-6700k,int8,226.38764617600103
-MobilenetV2,i7-6700k,int8,127.34148352600461
+MobilenetV2,i7-6700k,int8,127.3414835260046
+Mobilenet,i7-6700k,int8_edgetpu,2.5304812839999613
+MobilenetV2,i7-6700k,int8_edgetpu,2.7261307939998005
+Mobilenet,ARM Cortex-A53,fp32,150.54792536599996
+MobilenetV2,ARM Cortex-A53,int8_edgetpu,7.954013422000003
+Mobilenet,ARM Cortex-A53,int8,71.39470380399995
+MobilenetV2,ARM Cortex-A53,fp32,113.13349251600005
+Mobilenet,ARM Cortex-A53,int8_edgetpu,6.422179065999899
+MobilenetV2,ARM Cortex-A53,int8,62.712332531999905
+Mobilenet,ARM Cortex-A72,fp32,43.78279499150813
+MobilenetV2,ARM Cortex-A72,fp32,34.141789885237806
+Mobilenet,ARM Cortex-A72,int8,26.979306235909466
+MobilenetV2,ARM Cortex-A72,int8,24.4556009285152
+Mobilenet,ARM Cortex-A72,int8_edgetpu,2.2987636290490627
+MobilenetV2,ARM Cortex-A72,int8_edgetpu,2.68797479942441
